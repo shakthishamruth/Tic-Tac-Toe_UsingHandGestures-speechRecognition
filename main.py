@@ -54,7 +54,6 @@ def mouse_input_reset(x1, y1):
     y2 = y1 + 50
     if x1 < x < x2 and y1 < y < y2:
         win = 0
-        t = 1
         for i in range(3):
             for j in range(3):
                 board[i][j] = 0
@@ -64,22 +63,24 @@ def mouse_input_reset(x1, y1):
 
 
 def check(a, b):
-    global board, player
+    global board, player, reset
     if player == 1 and board[a - 1][b - 1] == 0:
         board[a - 1][b - 1] = player
         player = 2
         xo[a - 1][b - 1] = 'X'
+        check_win()
     elif player == 2:
         if board[a - 1][b - 1] == 0:
             board[a - 1][b - 1] = player
             player = 1
             xo[a - 1][b - 1] = 'O'
+            check_win()
         else:
             bot()
 
 
 def check_win():
-    global board, win, player1score, player2score, winner, reset
+    global board, win, player1score, player2score, winner, reset, player
     for i in range(3):
         if board[i][0] == board[i][1] and board[i][1] == board[i][2] and board[i][0] != 0:
             win = board[i][0]
@@ -129,12 +130,13 @@ def check_win():
             player2score += 1
             winner = 'Player2 wins'
         reset = True
+        player = 1
     else:
         check_Draw()
 
 
 def check_Draw():
-    global winner, reset, player
+    global winner, reset, player, win
     draw_cont = 0
     for i in range(3):
         for j in range(3):
@@ -144,12 +146,18 @@ def check_Draw():
         winner = '     DRAW'
         reset = True
         player = 1
+        win = 3
 
 
 def bot():
-    global xo, board
-    while player == 2:
-        check(random.choice([1, 2, 3]), random.choice([1, 2, 3]))
+    global xo, board, player1score, winner
+    if win == 1:
+        winner = 'Player1 wins'
+    elif win == 3:
+        winner = '     DRAW'
+    else:
+        while player == 2:
+            check(random.choice([1, 2, 3]), random.choice([1, 2, 3]))
 
 
 def mouse_input(x1, y1, a, b):
@@ -157,19 +165,16 @@ def mouse_input(x1, y1, a, b):
     x2 = x1 + 180
     y2 = y1 + 180
     if x1 < x < x2 and y1 < y < y2:
-        if reset == True:
+        if reset:
             for i in range(3):
                 for j in range(3):
                     board[i][j] = 0
                     xo[i][j] = ''
             win = 0
             reset = False
-        if player == 1:
+        elif player == 1:
             check(a, b)
-        elif player == 2:
-            bot()
         winner = ''
-        check_win()
 
 
 def showXO(cordx, cordy, a, b):
