@@ -136,6 +136,9 @@ def check_win():
             reset = True
 
 
+def bot():
+    
+
 def mouse_input(x1, y1, a, b):
     global x, y, player, board, xo, winner, reset, win
     x2 = x1 + 180
