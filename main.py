@@ -1,4 +1,5 @@
 import pygame
+import random
 import cv2
 
 pygame.init()
@@ -36,10 +37,10 @@ running = True
 def show_player_turn_score():
     global player, player1score, player2score
     if player == 1:
-        text_player_turn = font.render('Player1 Turn', True, (27, 140, 60))
+        text_player_turn = font.render('Player Turn', True, (27, 140, 60))
         screen.blit(text_player_turn, (301, 16))
     elif player == 2:
-        text_player_turn = font.render('Player2 Turn', True, (3, 17, 138))
+        text_player_turn = font.render('', True, (3, 17, 138))
         screen.blit(text_player_turn, (301, 16))
     text_player1_score = font.render(str(player1score), True, (27, 140, 60))
     screen.blit(text_player1_score, (85, 311))
@@ -64,14 +65,17 @@ def mouse_input_reset(x1, y1):
 
 def check(a, b):
     global board, player
-    if board[a - 1][b - 1] == 0:
+    if player == 1 and board[a - 1][b - 1] == 0:
         board[a - 1][b - 1] = player
-        if player == 1:
-            player = 2
-            xo[a - 1][b - 1] = 'X'
-        elif player == 2:
+        player = 2
+        xo[a - 1][b - 1] = 'X'
+    elif player == 2:
+        if board[a - 1][b - 1] == 0:
+            board[a - 1][b - 1] = player
             player = 1
             xo[a - 1][b - 1] = 'O'
+        else:
+            bot()
 
 
 def check_win():
@@ -126,18 +130,27 @@ def check_win():
             winner = 'Player2 wins'
         reset = True
     else:
-        draw_cont = 0
-        for i in range(3):
-            for j in range(3):
-                if board[i][j] != 0:
-                    draw_cont += 1
-        if draw_cont == 9:
-            winner = '     DRAW'
-            reset = True
+        check_Draw()
+
+
+def check_Draw():
+    global winner, reset, player
+    draw_cont = 0
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] != 0:
+                draw_cont += 1
+    if draw_cont == 9:
+        winner = '     DRAW'
+        reset = True
+        player = 1
 
 
 def bot():
-    
+    global xo, board
+    while player == 2:
+        check(random.choice([1, 2, 3]), random.choice([1, 2, 3]))
+
 
 def mouse_input(x1, y1, a, b):
     global x, y, player, board, xo, winner, reset, win
@@ -154,7 +167,7 @@ def mouse_input(x1, y1, a, b):
         if player == 1:
             check(a, b)
         elif player == 2:
-            check(a, b)
+            bot()
         winner = ''
         check_win()
 
@@ -213,6 +226,7 @@ while running:
     showXO(130, 410, 3, 1)
     showXO(310, 410, 3, 2)
     showXO(490, 410, 3, 3)
+    bot()
     show_winner()
     show_player_turn_score()
     pygame.display.update()
