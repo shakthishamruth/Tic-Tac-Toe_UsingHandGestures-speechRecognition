@@ -1,4 +1,6 @@
 import pygame
+import cv2
+
 pygame.init()
 
 # Window
