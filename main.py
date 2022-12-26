@@ -6,7 +6,7 @@ pygame.init()
 
 # Window
 screen = pygame.display.set_mode((800, 675))
-pygame.display.set_caption('XO_Game')
+pygame.display.set_caption('XO_Game_UsingHandGestures')
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
 background = pygame.image.load('background.png')
@@ -125,10 +125,8 @@ def check_win():
     if win != 0:
         if win == 1:
             player1score += 1
-            winner = 'Player1 wins'
         if win == 2:
             player2score += 1
-            winner = 'Player2 wins'
         reset = True
         player = 1
     else:
@@ -152,7 +150,9 @@ def check_Draw():
 def bot():
     global xo, board, player1score, winner
     if win == 1:
-        winner = 'Player1 wins'
+        winner = 'Player wins'
+    elif win == 2:
+        winner = 'Game Over!'
     elif win == 3:
         winner = '     DRAW'
     else:
