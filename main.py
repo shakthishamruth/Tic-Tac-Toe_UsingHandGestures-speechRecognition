@@ -256,7 +256,7 @@ with mp_hands.Hands(
         fingerCount = 0
         countset = []
 
-        for i in range(0, 50):
+        for i in range(0, 25):
             if results.multi_hand_landmarks:
 
                 for hand_landmarks in results.multi_hand_landmarks:
@@ -299,7 +299,7 @@ with mp_hands.Hands(
                         mp_drawing_styles.get_default_hand_landmarks_style(),
                         mp_drawing_styles.get_default_hand_connections_style())
             countset.append(fingerCount)
-            time.sleep(0.0001)
+            time.sleep(0.01)
 
         fingerCount = statistics.mode(countset)
 
@@ -328,34 +328,35 @@ with mp_hands.Hands(
                 mouse_input(490, 410, 3, 3)
                 mouse_input_reset(20, 630)
 
-        match fingerCount:
-            case 1:
-                gesture_input(1, 1)
-                continue
-            case 2:
-                gesture_input(1, 2)
-                continue
-            case 3:
-                gesture_input(1, 3)
-                continue
-            case 4:
-                gesture_input(2, 1)
-                continue
-            case 5:
-                gesture_input(2, 2)
-                continue
-            case 6:
-                gesture_input(2, 3)
-                continue
-            case 7:
-                gesture_input(3, 1)
-                continue
-            case 8:
-                gesture_input(3, 2)
-                continue
-            case 9:
-                gesture_input(3, 3)
-                continue
+        if win == 0:
+            match fingerCount:
+                case 1:
+                    gesture_input(1, 1)
+                    continue
+                case 2:
+                    gesture_input(1, 2)
+                    continue
+                case 3:
+                    gesture_input(1, 3)
+                    continue
+                case 4:
+                    gesture_input(2, 1)
+                    continue
+                case 5:
+                    gesture_input(2, 2)
+                    continue
+                case 6:
+                    gesture_input(2, 3)
+                    continue
+                case 7:
+                    gesture_input(3, 1)
+                    continue
+                case 8:
+                    gesture_input(3, 2)
+                    continue
+                case 9:
+                    gesture_input(3, 3)
+                    continue
         showXO(130, 50, 1, 1)
         showXO(310, 50, 1, 2)
         showXO(490, 50, 1, 3)
