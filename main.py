@@ -163,13 +163,13 @@ def check_Draw():
 def bot():
     global xo, board, player1score, winner, start
     if win == 1:
-        winner = 'Player Wins'
+        winner = 'Player Wins Show 10 to restart'
         start = False
     elif win == 2:
-        winner = 'Player Lost'
+        winner = 'Player Lost Show 10 to restart'
         start = False
     elif win == 3:
-        winner = '     DRAW'
+        winner = '       DRAW Show 10 to restart'
         start = False
     else:
         while player == 2:
