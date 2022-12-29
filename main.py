@@ -38,10 +38,11 @@ x = 0
 y = 0
 
 win = 0
-winner = ''
+winner = 'Show 10 to start the game'
 
 reset = False
 running = True
+start = False
 
 
 # Functions
@@ -60,7 +61,7 @@ def show_player_turn_score():
 
 
 def mouse_input_reset(x1, y1):
-    global x, y, board, xo, win, reset
+    global x, y, board, xo, win, reset, start
     x2 = x1 + 50
     y2 = y1 + 50
     if x1 < x < x2 and y1 < y < y2:
@@ -71,6 +72,7 @@ def mouse_input_reset(x1, y1):
                 xo[i][j] = ''
         win = 0
         reset = False
+        start = False
 
 
 def check(a, b):
@@ -91,7 +93,7 @@ def check(a, b):
 
 
 def check_win():
-    global board, win, player1score, player2score, winner, reset, player
+    global board, win, player1score, player2score, winner, reset, player, start
     for i in range(3):
         if board[i][0] == board[i][1] and board[i][1] == board[i][2] and board[i][0] != 0:
             win = board[i][0]
@@ -145,7 +147,7 @@ def check_win():
 
 
 def check_Draw():
-    global winner, reset, player, win
+    global winner, reset, player, win, start
     draw_cont = 0
     for i in range(3):
         for j in range(3):
@@ -159,37 +161,23 @@ def check_Draw():
 
 
 def bot():
-    global xo, board, player1score, winner
+    global xo, board, player1score, winner, start
     if win == 1:
         winner = 'Player Wins'
+        start = False
     elif win == 2:
         winner = 'Player Lost'
+        start = False
     elif win == 3:
         winner = '     DRAW'
+        start = False
     else:
         while player == 2:
             check(random.choice([1, 2, 3]), random.choice([1, 2, 3]))
 
 
-def mouse_input(x1, y1, a, b):
-    global x, y, player, board, xo, winner, reset, win
-    x2 = x1 + 180
-    y2 = y1 + 180
-    if x1 < x < x2 and y1 < y < y2:
-        if reset:
-            for i in range(3):
-                for j in range(3):
-                    board[i][j] = 0
-                    xo[i][j] = ''
-            win = 0
-            reset = False
-        elif player == 1:
-            check(a, b)
-        winner = ''
-
-
 def gesture_input(a, b):
-    global player, board, xo, winner, reset, win
+    global player, board, xo, winner, reset, win, start
     if reset:
         for i in range(3):
             for j in range(3):
@@ -256,7 +244,7 @@ with mp_hands.Hands(
         fingerCount = 0
         countset = []
 
-        for i in range(0, 25):
+        for i in range(0, 250):
             if results.multi_hand_landmarks:
 
                 for hand_landmarks in results.multi_hand_landmarks:
@@ -298,8 +286,8 @@ with mp_hands.Hands(
                         mp_hands.HAND_CONNECTIONS,
                         mp_drawing_styles.get_default_hand_landmarks_style(),
                         mp_drawing_styles.get_default_hand_connections_style())
+                    time.sleep(0.000005)
             countset.append(fingerCount)
-            time.sleep(0.01)
 
         fingerCount = statistics.mode(countset)
 
@@ -317,18 +305,19 @@ with mp_hands.Hands(
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 x, y = pygame.mouse.get_pos()
-                mouse_input(130, 50, 1, 1)
-                mouse_input(310, 50, 1, 2)
-                mouse_input(490, 50, 1, 3)
-                mouse_input(130, 230, 2, 1)
-                mouse_input(310, 230, 2, 2)
-                mouse_input(490, 230, 2, 3)
-                mouse_input(130, 410, 3, 1)
-                mouse_input(310, 410, 3, 2)
-                mouse_input(490, 410, 3, 3)
                 mouse_input_reset(20, 630)
 
-        if win == 0:
+        if not start and fingerCount == 10:
+            start = True
+            winner = ''
+            win = 0
+            for i in range(3):
+                for j in range(3):
+                    board[i][j] = 0
+                    xo[i][j] = ''
+            win = 0
+            reset = False
+        if win == 0 and start:
             match fingerCount:
                 case 1:
                     gesture_input(1, 1)
