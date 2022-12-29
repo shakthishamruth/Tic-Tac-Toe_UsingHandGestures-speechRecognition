@@ -7,17 +7,17 @@ import time
 
 pygame.init()
 
-# mediapipe
+# Mediapipe
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
-# For webcam input:
-cap = cv2.VideoCapture(0)
+# For webcam input
+cap = cv2.VideoCapture(0)  # Use 1 for external cam
 
 # Window
 screen = pygame.display.set_mode((800, 675))
-pygame.display.set_caption('XO_Game_UsingHandGestures')
+pygame.display.set_caption('TicTacToe_UsingHandGestures')
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
 background = pygame.image.load('background.png')
@@ -31,14 +31,15 @@ player = 1
 board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 xo = [['', '', ''], ['', '', ''], ['', '', '']]
 
-player1score = 0
-player2score = 0
+player1score = 0  # Player1 is PLAYER
+player2score = 0  # Player2 is BOT
 
+# To get mouse position
 x = 0
 y = 0
 
 win = 0
-winner = 'Show 10 to start the game'
+winner = '     Show 10 to start the game'
 
 reset = False
 running = True
@@ -47,13 +48,7 @@ start = False
 
 # Functions
 def show_player_turn_score():
-    global player, player1score, player2score
-    if player == 1:
-        text_player_turn = font.render('Player Turn', True, (27, 140, 60))
-        screen.blit(text_player_turn, (301, 16))
-    elif player == 2:
-        text_player_turn = font.render('', True, (3, 17, 138))
-        screen.blit(text_player_turn, (301, 16))
+    global player1score, player2score
     text_player1_score = font.render(str(player1score), True, (27, 140, 60))
     screen.blit(text_player1_score, (85, 311))
     text_player2_score = font.render(str(player2score), True, (3, 17, 138))
@@ -61,7 +56,7 @@ def show_player_turn_score():
 
 
 def mouse_input_reset(x1, y1):
-    global x, y, board, xo, win, reset, start
+    global x, y, board, xo, win, reset, start, winner
     x2 = x1 + 50
     y2 = y1 + 50
     if x1 < x < x2 and y1 < y < y2:
@@ -73,10 +68,11 @@ def mouse_input_reset(x1, y1):
         win = 0
         reset = False
         start = False
+        winner = '     Show 10 to start the game'
 
 
 def check(a, b):
-    global board, player, reset
+    global board, player
     if player == 1 and board[a - 1][b - 1] == 0:
         board[a - 1][b - 1] = player
         player = 2
@@ -93,7 +89,7 @@ def check(a, b):
 
 
 def check_win():
-    global board, win, player1score, player2score, winner, reset, player, start
+    global board, win, player1score, player2score, reset, player
     for i in range(3):
         if board[i][0] == board[i][1] and board[i][1] == board[i][2] and board[i][0] != 0:
             win = board[i][0]
@@ -147,7 +143,7 @@ def check_win():
 
 
 def check_Draw():
-    global winner, reset, player, win, start
+    global winner, reset, player, win
     draw_cont = 0
     for i in range(3):
         for j in range(3):
@@ -161,7 +157,7 @@ def check_Draw():
 
 
 def bot():
-    global xo, board, player1score, winner, start
+    global winner, start
     if win == 1:
         winner = 'Player Wins Show 10 to restart'
         start = False
@@ -177,7 +173,7 @@ def bot():
 
 
 def gesture_input(a, b):
-    global player, board, xo, winner, reset, win, start
+    global player, board, xo, winner, reset, win
     if reset:
         for i in range(3):
             for j in range(3):
@@ -212,7 +208,7 @@ def showXO(cordx, cordy, a, b):
 def show_winner():
     global winner
     textX = font.render(winner, True, (0, 0, 0))
-    screen.blit(textX, (300, 600))
+    screen.blit(textX, (160, 600))
 
 
 # Main loop
@@ -230,8 +226,7 @@ with mp_hands.Hands(
             # If loading a video, use 'break' instead of 'continue'.
             continue
 
-        # To improve performance, optionally mark the image as not writeable to
-        # pass by reference.
+        # To improve performance, optionally mark the image as not writeable to pass by reference.
         image.flags.writeable = False
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         results = hands.process(image)
@@ -244,7 +239,7 @@ with mp_hands.Hands(
         fingerCount = 0
         countset = []
 
-        for i in range(0, 250):
+        for i in range(0, 300):
             if results.multi_hand_landmarks:
 
                 for hand_landmarks in results.multi_hand_landmarks:
@@ -259,17 +254,15 @@ with mp_hands.Hands(
                     for landmarks in hand_landmarks.landmark:
                         handLandmarks.append([landmarks.x, landmarks.y])
 
-                    # Test conditions for each finger: Count is increased if finger is
-                    #   considered raised.
-                    # Thumb: TIP x position must be greater or lower than IP x position,
-                    #   depending on hand label.
+                    # Test conditions for each finger: Count is increased if finger is considered raised.
+                    # Thumb: TIP x position must be greater or lower than IP x position, depending on hand label.
                     if handLabel == "Left" and handLandmarks[4][0] > handLandmarks[3][0]:
                         fingerCount = fingerCount + 1
                     elif handLabel == "Right" and handLandmarks[4][0] < handLandmarks[3][0]:
                         fingerCount = fingerCount + 1
 
-                    # Other fingers: TIP y position must be lower than PIP y position,
-                    #   as image origin is in the upper left corner.
+                    # Other fingers: TIP y position must be lower than PIP y position, as image origin is in the
+                    # upper left corner.
                     if handLandmarks[8][1] < handLandmarks[6][1]:  # Index finger
                         fingerCount = fingerCount + 1
                     if handLandmarks[12][1] < handLandmarks[10][1]:  # Middle finger
@@ -286,27 +279,28 @@ with mp_hands.Hands(
                         mp_hands.HAND_CONNECTIONS,
                         mp_drawing_styles.get_default_hand_landmarks_style(),
                         mp_drawing_styles.get_default_hand_connections_style())
-                    time.sleep(0.000005)
+                    time.sleep(0.00000005)
             countset.append(fingerCount)
 
+        # Taking mode of all the finger counts to get accurate finger count
         fingerCount = statistics.mode(countset)
 
         # Display finger count
         cv2.putText(image, str(fingerCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (27, 140, 60), 10)
 
-        # Display image
+        # Display camera video
         cv2.imshow('Camera', image)
         if cv2.waitKey(5) & 0xFF == 27:
             break
 
-        # Events
+        # Pygame Events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 x, y = pygame.mouse.get_pos()
                 mouse_input_reset(20, 630)
-
+        # Check gesture inputs
         if not start and fingerCount == 10:
             start = True
             winner = ''
@@ -346,6 +340,7 @@ with mp_hands.Hands(
                 case 9:
                     gesture_input(3, 3)
                     continue
+        # Display X O on screen
         showXO(130, 50, 1, 1)
         showXO(310, 50, 1, 2)
         showXO(490, 50, 1, 3)
