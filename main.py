@@ -292,7 +292,7 @@ with mp_hands.Hands(
         fingerCount = statistics.mode(countset)
 
         # Display finger count
-        cv2.putText(image, str(fingerCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
+        cv2.putText(image, str(fingerCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (27, 140, 60), 10)
 
         # Display image
         cv2.imshow('Camera', image)
