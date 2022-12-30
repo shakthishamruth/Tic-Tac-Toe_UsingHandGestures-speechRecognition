@@ -295,7 +295,8 @@ with mp_hands.Hands(
             countSet = []
             ctime = time.time()
         # Display finger count
-        cv2.putText(image, str(finalCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (27, 140, 60), 10)
+        cv2.putText(image, 'Input:' + str(finalCount), (35, 450), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (27, 140, 60), 3)
+        cv2.putText(image, str(fingerCount), (35, 75), cv2.FONT_HERSHEY_SIMPLEX, 2.5, (0, 0, 0), 7)
 
         # Display camera video
         cv2.imshow('Camera', image)
