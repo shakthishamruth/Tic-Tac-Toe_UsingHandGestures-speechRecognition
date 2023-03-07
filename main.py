@@ -38,6 +38,9 @@ player2score = 0  # Player2 is BOT
 x = 0
 y = 0
 
+sec = 0
+stopwatchBoolean = True
+
 win = 0
 winner = '     Show 10 to start the game'
 
@@ -217,6 +220,17 @@ def show_winner():
     screen.blit(textX, (160, 600))
 
 
+def show_time():
+    global sec
+    sec = int(sec)
+    mins = sec // 60
+    sec = sec % 60
+    mins = mins % 60
+    time = '{0}:{1}'.format(int(mins), sec)
+    texttime = font.render(time, True, (0, 0, 0))
+    screen.blit(texttime, (690, 600))
+
+
 # Main loop
 with mp_hands.Hands(
         model_complexity=0,
@@ -321,7 +335,15 @@ with mp_hands.Hands(
                     xo[i][j] = ''
             win = 0
             reset = False
+            sec = 0
+            starttime = 0
+            stopwatchBoolean = True
         if win == 0 and start:
+            if stopwatchBoolean:
+                starttime = time.time()
+                stopwatchBoolean = False
+            else:
+                sec = time.time() - starttime
             match finalCount:
                 case 1:
                     gesture_input(1, 1)
@@ -362,6 +384,7 @@ with mp_hands.Hands(
         showXO(490, 410, 3, 3)
         bot()
         show_winner()
+        show_time()
         show_player_turn_score()
         pygame.display.update()
 cap.release()
