@@ -336,14 +336,14 @@ with mp_hands.Hands(
             win = 0
             reset = False
             sec = 0
-            starttime = 0
+            startTime = 0
             stopwatchBoolean = True
         if win == 0 and start:
             if stopwatchBoolean:
-                starttime = time.time()
+                startTime = time.time()
                 stopwatchBoolean = False
             else:
-                sec = time.time() - starttime
+                sec = time.time() - startTime
             match finalCount:
                 case 1:
                     gesture_input(1, 1)
