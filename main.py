@@ -228,7 +228,7 @@ def show_time():
     mins = mins % 60
     time = '{0}:{1}'.format(int(mins), sec)
     texttime = font.render(time, True, (0, 0, 0))
-    screen.blit(texttime, (690, 600))
+    screen.blit(texttime, (705, 30))
 
 
 # Main loop
