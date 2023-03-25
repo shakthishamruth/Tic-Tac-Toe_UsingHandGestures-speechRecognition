@@ -19,7 +19,7 @@ def record():
     )
 
     print('Recording')
-    seconds = 3
+    seconds = 5
     frames = []
 
     for i in range(0, int(RATE / FRAMES_PER_BUFFER * seconds)):
