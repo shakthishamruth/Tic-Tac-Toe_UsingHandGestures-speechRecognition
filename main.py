@@ -20,6 +20,8 @@ enableCamera = False
 screen = pygame.display.set_mode((800, 675))
 pygame.display.set_caption('TicTacToe_UsingHandGestures')
 icon = pygame.image.load('icon.png')
+camimg = pygame.image.load("cam.png")
+micimg = pygame.image.load("mic.png")
 pygame.display.set_icon(icon)
 background = pygame.image.load('background.png')
 
@@ -54,6 +56,7 @@ setCount = 0
 countSet = []
 
 finalCount = 0
+speechStr = str(0)
 
 
 # Functions
@@ -196,6 +199,18 @@ def gesture_input(a, b):
     winner = ''
 
 
+def mouse_input_camera_onoff(x1, y1):
+    global enableCamera, x, y, cap
+    x2 = x1 + 50
+    y2 = y1 + 50
+    if x1 < x < x2 and y1 < y < y2:
+        if enableCamera:
+            enableCamera = False
+            cap.release
+        else:
+            enableCamera = True
+
+
 def showXO(cordx, cordy, a, b):
     global xo
     if xo[a - 1][b - 1] == 'X':
@@ -233,8 +248,9 @@ def show_time():
 
 
 def showSpeechtoTxt():
-    textX = font.render("Recording", True, (0, 0, 0))
-    screen.blit(textX, (160, 630))
+    global speechStr
+    textX = font.render(speechStr, True, (0, 0, 0))
+    screen.blit(textX, (50, 25))
 
 
 # Main loop
@@ -247,6 +263,8 @@ with mp_hands.Hands(
         screen.blit(background, (0, 0))
 
         if enableCamera:
+            screen.blit(camimg, (10, 23))
+            speechStr = "CameraEnabled"
             success, image = cap.read()
             if not success:
                 print("Ignoring empty camera frame.")
@@ -324,8 +342,10 @@ with mp_hands.Hands(
             if cv2.waitKey(5) & 0xFF == 27:
                 break
         else:
+            screen.blit(micimg, (10, 23))
             file = open("outNumber.txt", "r")
             finalCount = int(file.read())
+            speechStr = str(finalCount)
             file.close()
 
         # Pygame Events
@@ -335,6 +355,7 @@ with mp_hands.Hands(
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 x, y = pygame.mouse.get_pos()
                 mouse_input_reset(20, 630)
+                mouse_input_camera_onoff(10, 23)
         # Check gesture inputs
         if not start and finalCount == 10:
             start = True
