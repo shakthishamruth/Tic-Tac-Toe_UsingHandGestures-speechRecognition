@@ -45,7 +45,7 @@ sec = 0
 stopwatchBoolean = True
 
 win = 0
-winner = '     10 to start the game'
+winner = '         10 to start the game'
 
 reset = False
 running = True
@@ -81,7 +81,7 @@ def mouse_input_reset(x1, y1):
         win = 0
         reset = False
         start = False
-        winner = '     10 to start the game'
+        winner = '         10 to start the game'
 
 
 def check(a, b):
@@ -178,7 +178,7 @@ def bot():
         winner = 'Player Lost 10 to restart'
         start = False
     elif win == 3:
-        winner = '       DRAW 10 to restart'
+        winner = '          DRAW 10 to restart'
         start = False
     else:
         while player == 2:
