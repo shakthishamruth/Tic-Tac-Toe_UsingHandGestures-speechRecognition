@@ -7,27 +7,28 @@ num = 0
 def number():
     global num
     recordMic.record()
-    txt = speechRecognition.audioToTxt("output.wav")
-    print(txt.upper())
-    if txt.upper() == 'ONE.':
+    txt = speechRecognition.audioToTxt("output.wav").split(' ', 1)
+    first_word = str(txt[0]).upper()
+    print(first_word.upper())
+    if first_word == 'ONE.':
         num = 1
-    elif txt.upper() == 'TWO.':
+    elif first_word == 'TWO.':
         num = 2
-    elif txt.upper() == 'THREE.':
+    elif first_word == 'THREE.':
         num = 3
-    elif txt.upper() == 'FOUR.':
+    elif first_word == 'FOUR.':
         num = 4
-    elif txt.upper() == 'FIVE.':
+    elif first_word == 'FIVE.':
         num = 5
-    elif txt.upper() == 'SIX.':
+    elif first_word == 'SIX.':
         num = 6
-    elif txt.upper() == 'SEVEN.':
+    elif first_word == 'SEVEN.':
         num = 7
-    elif txt.upper() == 'EIGHT.':
+    elif first_word == 'EIGHT.':
         num = 8
-    elif txt.upper() == 'NINE.':
+    elif first_word == 'NINE.':
         num = 9
-    elif txt.upper() == 'TEN.':
+    elif first_word == 'TEN.':
         num = 10
     else:
         num = 0

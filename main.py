@@ -84,7 +84,7 @@ def mouse_input_reset(x1, y1):
         winner = '         10 to start the game'
 
 
-def check(a, b):
+def move(a, b):
     global board, player
     if player == 1 and board[a - 1][b - 1] == 0:
         board[a - 1][b - 1] = player
@@ -182,7 +182,7 @@ def bot():
         start = False
     else:
         while player == 2:
-            check(random.choice([1, 2, 3]), random.choice([1, 2, 3]))
+            move(random.choice([1, 2, 3]), random.choice([1, 2, 3]))
 
 
 def gesture_input(a, b):
@@ -195,7 +195,7 @@ def gesture_input(a, b):
         win = 0
         reset = False
     elif player == 1:
-        check(a, b)
+        move(a, b)
     winner = ''
 
 
@@ -343,10 +343,16 @@ with mp_hands.Hands(
                 break
         else:
             screen.blit(micimg, (10, 23))
-            file = open("outNumber.txt", "r")
-            finalCount = int(file.read())
-            speechStr = str(finalCount)
-            file.close()
+            if ctime + 1 <= (time.time()):
+                file = open("outNumber.txt", "r")
+                finalCount = int(file.read())
+                speechStr = str(finalCount)
+                file.close()
+                file = open("outNumber.txt", "w")
+                file.write(str(0))
+                file.close()
+                print('read')
+                ctime = time.time()
 
         # Pygame Events
         for event in pygame.event.get():
