@@ -185,7 +185,7 @@ def bot():
             move(random.choice([1, 2, 3]), random.choice([1, 2, 3]))
 
 
-def gesture_input(a, b):
+def input(a, b):
     global player, board, xo, winner, reset, win
     if reset:
         for i in range(3):
@@ -213,6 +213,7 @@ def mouse_input_camera_onoff(x1, y1):
 
 def showXO(cordx, cordy, a, b):
     global xo
+    # Display moves
     if xo[a - 1][b - 1] == 'X':
         textX = font2.render('X', True, (27, 140, 60))
         screen.blit(textX, (cordx + 44, cordy + 38))
@@ -222,6 +223,7 @@ def showXO(cordx, cordy, a, b):
     elif xo[a - 1][b - 1] == '':
         text_ = font2.render('', True, (255, 255, 255))
         screen.blit(text_, (cordx + 44, cordy + 38))
+    # Display win conditions
     elif xo[a - 1][b - 1] == 'x':
         textX = font2.render('X', True, (255, 0, 0))
         screen.blit(textX, (cordx + 44, cordy + 38))
@@ -384,31 +386,31 @@ with mp_hands.Hands(
                 sec = time.time() - startTime
             match finalCount:
                 case 1:
-                    gesture_input(1, 1)
+                    input(1, 1)
                     continue
                 case 2:
-                    gesture_input(1, 2)
+                    input(1, 2)
                     continue
                 case 3:
-                    gesture_input(1, 3)
+                    input(1, 3)
                     continue
                 case 4:
-                    gesture_input(2, 1)
+                    input(2, 1)
                     continue
                 case 5:
-                    gesture_input(2, 2)
+                    input(2, 2)
                     continue
                 case 6:
-                    gesture_input(2, 3)
+                    input(2, 3)
                     continue
                 case 7:
-                    gesture_input(3, 1)
+                    input(3, 1)
                     continue
                 case 8:
-                    gesture_input(3, 2)
+                    input(3, 2)
                     continue
                 case 9:
-                    gesture_input(3, 3)
+                    input(3, 3)
                     continue
         # Display X O on screen
         showXO(130, 50, 1, 1)
