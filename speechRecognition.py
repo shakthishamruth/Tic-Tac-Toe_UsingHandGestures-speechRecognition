@@ -7,6 +7,8 @@ transcript_endpoint = "https://api.assemblyai.com/v2/transcript"
 
 headers = {'authorization': API_KEY_ASSEMBLYAI}
 
+running = True
+
 
 # upload
 def upload(filewav):
@@ -60,3 +62,52 @@ def audioToTxt(filename):
         return data['text']
     except:
         return 'ZERO.'
+
+
+while running:
+    global num
+    file = open("outNumber.txt", "r")
+    string = file.read()
+    file.close()
+    if string == '0\nDoneRecording':
+        txt = audioToTxt("output.wav").split(' ', 1)
+        first_word = str(txt[0]).upper()
+        print(first_word.upper())
+        if first_word == 'ONE.':
+            num = 1
+            stringWrite = str(num) + '\nTranscribed'
+        elif first_word == 'TWO.':
+            num = 2
+            stringWrite = str(num) + '\nTranscribed'
+        elif first_word == 'THREE.':
+            num = 3
+            stringWrite = str(num) + '\nTranscribed'
+        elif first_word == 'FOUR.':
+            num = 4
+            stringWrite = str(num) + '\nTranscribed'
+        elif first_word == 'FIVE.':
+            num = 5
+            stringWrite = str(num) + '\nTranscribed'
+        elif first_word == 'SIX.':
+            num = 6
+            stringWrite = str(num) + '\nTranscribed'
+        elif first_word == 'SEVEN.':
+            num = 7
+            stringWrite = str(num) + '\nTranscribed'
+        elif first_word == 'EIGHT.':
+            num = 8
+            stringWrite = str(num) + '\nTranscribed'
+        elif first_word == 'NINE.':
+            num = 9
+            stringWrite = str(num) + '\nTranscribed'
+        elif first_word == 'TEN.':
+            num = 10
+            stringWrite = str(num) + '\nTranscribed'
+        else:
+            num = 0
+            stringWrite = str(num) + '\nTranscribed'
+        file = open("outNumber.txt", "w")
+        file.write(stringWrite)
+        file.close()
+    elif string == '0\nExit':
+        running = False

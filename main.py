@@ -4,8 +4,35 @@ import cv2
 import mediapipe as mp
 import statistics
 import time
+import pyaudio
+import wave
 
 pygame.init()
+
+# Record
+FRAMES_PER_BUFFER = 3200
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 16000
+
+p = pyaudio.PyAudio()
+
+stream = p.open(
+    format=FORMAT,
+    channels=CHANNELS,
+    rate=RATE,
+    input=True,
+    frames_per_buffer=FRAMES_PER_BUFFER
+)
+
+seconds = 5
+frames = []
+
+recordLoop = 0
+
+file = open("outNumber.txt", "w")
+file.write(str('0\nSpeak'))
+file.close()
 
 # Mediapipe
 mp_drawing = mp.solutions.drawing_utils
@@ -344,21 +371,67 @@ with mp_hands.Hands(
             if cv2.waitKey(5) & 0xFF == 27:
                 break
         else:
+            if recordLoop < int(RATE / FRAMES_PER_BUFFER * seconds):
+                data = stream.read(FRAMES_PER_BUFFER)
+                frames.append(data)
+                recordLoop += 1
+            elif recordLoop == int(RATE / FRAMES_PER_BUFFER * seconds):
+                print('done recording')
+                stream.stop_stream()
+                stream.close()
+                p.terminate()
+
+                obj = wave.open("output.wav", "wb")
+                obj.setnchannels(CHANNELS)
+                obj.setsampwidth(p.get_sample_size(FORMAT))
+                obj.setframerate(RATE)
+                obj.writeframes(b"".join(frames))
+                obj.close()
+
+                p = pyaudio.PyAudio()
+                stream = p.open(
+                    format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    input=True,
+                    frames_per_buffer=FRAMES_PER_BUFFER
+                )
+                frames = []
+                recordLoop += 5
+                file = open("outNumber.txt", "w")
+                file.write(str('0\nDoneRecording'))
+                file.close()
+            elif recordLoop > int(RATE / FRAMES_PER_BUFFER * seconds):
+                file = open("outNumber.txt", "r")
+                file.readline()
+                stringRead = file.readline()
+                file.close()
+                if stringRead == 'Transcribed':
+                    file = open("outNumber.txt", "w")
+                    file.write(str('0\nSpeak'))
+                    file.close()
+                    recordLoop = 0
+
             screen.blit(micimg, (10, 23))
             if ctime + 1 <= (time.time()):
                 file = open("outNumber.txt", "r")
-                finalCount = int(file.read())
-                speechStr = str(finalCount)
+                finalCount = int(file.readline())
+                speechStr = str(finalCount) + ' ' + file.read()
                 file.close()
+                """
                 file = open("outNumber.txt", "w")
-                file.write(str(0))
+                file.write(str('0\nnotDone'))
                 file.close()
-                print('read')
+                """
+                print(finalCount)
                 ctime = time.time()
 
         # Pygame Events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                file = open("outNumber.txt", "w")
+                file.write('0\nExit')
+                file.close()
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 x, y = pygame.mouse.get_pos()
