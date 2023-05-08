@@ -15,6 +15,7 @@ python-time
 PyAudio
 
 requests
+---
 
 Run `main.py` and `speechRecognition.py` together.
 
