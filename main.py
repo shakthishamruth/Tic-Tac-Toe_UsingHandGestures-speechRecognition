@@ -34,6 +34,8 @@ file = open("outNumber.txt", "w")
 file.write(str('0\nSpeak'))
 file.close()
 
+finalCount = 0
+
 # Mediapipe
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -399,24 +401,23 @@ with mp_hands.Hands(
                 frames = []
                 recordLoop += 5
                 file = open("outNumber.txt", "w")
-                file.write(str('0\nDoneRecording'))
+                file.write(str('0\nTranscribing_'))
                 file.close()
-            elif recordLoop > int(RATE / FRAMES_PER_BUFFER * seconds):
-                file = open("outNumber.txt", "r")
-                file.readline()
-                stringRead = file.readline()
-                file.close()
-                if stringRead == 'Transcribed':
-                    file = open("outNumber.txt", "w")
-                    file.write(str('0\nSpeak'))
-                    file.close()
-                    recordLoop = 0
 
             screen.blit(micimg, (10, 23))
+            file = open("outNumber.txt", "r")
+            finalCount = int(file.readline())
+            stringRead = file.readline()
+            file.close()
+            if stringRead == 'Transcribed':
+                file = open("outNumber.txt", "w")
+                file.write(str('0\nSpeak'))
+                file.close()
+                recordLoop = 0
             if ctime + 1 <= (time.time()):
                 file = open("outNumber.txt", "r")
-                finalCount = int(file.readline())
-                speechStr = str(finalCount) + ' ' + file.read()
+                file.readline()
+                speechStr = file.read()
                 file.close()
                 """
                 file = open("outNumber.txt", "w")

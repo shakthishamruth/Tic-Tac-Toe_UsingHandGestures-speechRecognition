@@ -69,7 +69,7 @@ while running:
     file = open("outNumber.txt", "r")
     string = file.read()
     file.close()
-    if string == '0\nDoneRecording':
+    if string == '0\nTranscribing_':
         txt = audioToTxt("output.wav").split(' ', 1)
         first_word = str(txt[0]).upper()
         print(first_word.upper())
