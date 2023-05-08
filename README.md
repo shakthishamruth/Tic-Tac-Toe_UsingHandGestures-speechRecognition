@@ -16,7 +16,7 @@ PyAudio
 
 requests
 
-
+#
 Run `main.py` and `speechRecognition.py` together.
 
 To switch between speech recognition and hand gesture input press the mic icon/cam icon.
