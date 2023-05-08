@@ -91,7 +91,7 @@ while running:
             num = 8
         elif first_word == 'NINE.':
             num = 9
-        elif first_word == 'TEN.':
+        elif first_word == 'TEN.' or first_word == 'THEN.':
             num = 10
         else:
             num = 0
