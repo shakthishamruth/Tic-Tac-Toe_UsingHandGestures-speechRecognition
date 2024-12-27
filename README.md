@@ -1,4 +1,4 @@
-# Tic-Tac-Toe_UsingHandGestures
+# Tic-Tac-Toe UsingHandGestures and SpeechRecognition
 
 Libraries Needed (install the following python libraries using pip install):
 ---
