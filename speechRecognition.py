@@ -1,6 +1,6 @@
 import requests
 
-API_KEY_ASSEMBLYAI = "fed83bbeb54f4efc929579e670b83f8d"
+API_KEY_ASSEMBLYAI = "KEY"
 filename = "output.wav"
 upload_endpoint = "https://api.assemblyai.com/v2/upload"
 transcript_endpoint = "https://api.assemblyai.com/v2/transcript"
